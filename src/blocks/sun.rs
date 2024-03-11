@@ -1,13 +1,13 @@
 use crate::{blocks::prelude::Value, widget::Widget};
 
-use super::prelude::*;
+use super::{prelude::*, weather::WeatherService};
 
-#[derive(Deserialize, Debug, SmartDefault)]
-#[serde(deny_unknown_fields, default)]
+#[derive(Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
 pub struct Config {
     pub format: FormatConfig,
-    #[default(5.into())]
     pub interval: Seconds,
+    pub service: WeatherService, // TODO check that weather service works
 }
 
 pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
