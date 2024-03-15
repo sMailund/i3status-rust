@@ -222,6 +222,8 @@ struct WeatherMoment {
     wind: f64,
     wind_kmh: f64,
     wind_direction: Option<f64>,
+    sunrise: i64,
+    sunset: i64,
 }
 struct ForecastAggregate {
     temp: f64,

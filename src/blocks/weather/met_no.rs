@@ -60,6 +60,8 @@ impl<'a> Service<'a> {
             wind_kmh: wind_speed * 3.6,
             wind_direction: instant.wind_from_direction,
             icon: weather_to_icon(summary, is_night),
+            sunrise: 0, // TODO
+            sunset: 0,  // TODO
         }
     }
 }

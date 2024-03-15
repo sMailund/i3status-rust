@@ -248,6 +248,8 @@ impl WeatherProvider for Service<'_> {
                     },
                 wind_direction: current_data.wind.deg,
                 icon: weather_to_icon(current_data.weather[0].main.as_str(), is_night),
+                sunrise: current_data.sys.sunrise,
+                sunset: current_data.sys.sunset,
             }
         };
 
@@ -382,6 +384,8 @@ impl WeatherProvider for Service<'_> {
                             UnitSystem::Imperial => 3.6 * 0.447,
                         },
                     wind_direction: fin_data.wind.deg,
+                    sunset: 0,  // TODO
+                    sunrise: 0, // TODO
                 },
             })
         };
