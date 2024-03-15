@@ -261,6 +261,8 @@ impl WeatherResult {
             "wind" => Value::number(self.current_weather.wind),
             "wind_kmh" => Value::number(self.current_weather.wind_kmh),
             "direction" => Value::text(convert_wind_direction(self.current_weather.wind_direction).into()),
+            "sunset" => Value::number(self.current_weather.sunset),
+            "sunrise" => Value::number(self.current_weather.sunrise),
         };
 
         if let Some(forecast) = self.forecast {
