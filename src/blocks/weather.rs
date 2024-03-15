@@ -58,18 +58,20 @@
 //!
 //! # Available Format Keys
 //!
-//!  Key                                         | Value                                                                         | Type   | Unit
-//! ---------------------------------------------|-------------------------------------------------------------------------------|--------|-----
-//! `location`                                   | Location name (exact format depends on the service)                           | Text   | -
-//! `icon{,_ffin}`                               | Icon representing the weather                                                 | Icon   | -
-//! `weather{,_ffin}`                            | Textual brief description of the weather, e.g. "Raining"                      | Text   | -
-//! `weather_verbose{,_ffin}`                    | Textual verbose description of the weather, e.g. "overcast clouds"            | Text   | -
-//! `temp{,_{favg,fmin,fmax,ffin}}`              | Temperature                                                                   | Number | degrees
-//! `apparent{,_{favg,fmin,fmax,ffin}}`          | Australian Apparent Temperature                                               | Number | degrees
-//! `humidity{,_{favg,fmin,fmax,ffin}}`          | Humidity                                                                      | Number | %
-//! `wind{,_{favg,fmin,fmax,ffin}}`              | Wind speed                                                                    | Number | -
-//! `wind_kmh{,_{favg,fmin,fmax,ffin}}`          | Wind speed. The wind speed in km/h                                            | Number | -
-//! `direction{,_{favg,fmin,fmax,ffin}}`         | Wind direction, e.g. "NE"                                                     | Text   | -
+//!  Key                                         | Value                                                                         | Type     | Unit
+//! ---------------------------------------------|-------------------------------------------------------------------------------|----------|-----
+//! `location`                                   | Location name (exact format depends on the service)                           | Text     | -
+//! `icon{,_ffin}`                               | Icon representing the weather                                                 | Icon     | -
+//! `weather{,_ffin}`                            | Textual brief description of the weather, e.g. "Raining"                      | Text     | -
+//! `weather_verbose{,_ffin}`                    | Textual verbose description of the weather, e.g. "overcast clouds"            | Text     | -
+//! `temp{,_{favg,fmin,fmax,ffin}}`              | Temperature                                                                   | Number   | degrees
+//! `apparent{,_{favg,fmin,fmax,ffin}}`          | Australian Apparent Temperature                                               | Number   | degrees
+//! `humidity{,_{favg,fmin,fmax,ffin}}`          | Humidity                                                                      | Number   | %
+//! `wind{,_{favg,fmin,fmax,ffin}}`              | Wind speed                                                                    | Number   | -
+//! `wind_kmh{,_{favg,fmin,fmax,ffin}}`          | Wind speed. The wind speed in km/h                                            | Number   | -
+//! `direction{,_{favg,fmin,fmax,ffin}}`         | Wind direction, e.g. "NE"                                                     | Text     | -
+//! `sunrise`                                    | Time of sunrise                                                                | DateTime | -
+//! `sunset`                                     | Time of sunset                                                                | DateTime | -
 //!
 //! You can use the suffixes noted above to get the following:
 //!
