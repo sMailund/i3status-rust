@@ -120,6 +120,8 @@ use std::fmt;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
+use chrono::{DateTime, Utc};
+
 use crate::formatting::Format;
 
 use super::prelude::*;
@@ -222,7 +224,7 @@ struct WeatherMoment {
     wind: f64,
     wind_kmh: f64,
     wind_direction: Option<f64>,
-    sunrise: i64,
+    sunrise: DateTime<Utc>,
     sunset: i64,
 }
 struct ForecastAggregate {
@@ -262,7 +264,7 @@ impl WeatherResult {
             "wind_kmh" => Value::number(self.current_weather.wind_kmh),
             "direction" => Value::text(convert_wind_direction(self.current_weather.wind_direction).into()),
             "sunset" => Value::number(self.current_weather.sunset),
-            "sunrise" => Value::number(self.current_weather.sunrise),
+            "sunrise" => Value::datetime(self.current_weather.sunrise, None),
         };
 
         if let Some(forecast) = self.forecast {

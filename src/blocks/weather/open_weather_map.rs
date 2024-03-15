@@ -1,4 +1,7 @@
+use std::time::UNIX_EPOCH;
+
 use super::*;
+use chrono::{DateTime, Utc};
 use serde::{de, Deserializer};
 
 pub(super) const GEO_URL: &str = "https://api.openweathermap.org/geo/1.0";
@@ -248,7 +251,7 @@ impl WeatherProvider for Service<'_> {
                     },
                 wind_direction: current_data.wind.deg,
                 icon: weather_to_icon(current_data.weather[0].main.as_str(), is_night),
-                sunrise: current_data.sys.sunrise,
+                sunrise: unix_to_datetime(current_data.sys.sunrise),
                 sunset: current_data.sys.sunset,
             }
         };
@@ -384,8 +387,8 @@ impl WeatherProvider for Service<'_> {
                             UnitSystem::Imperial => 3.6 * 0.447,
                         },
                     wind_direction: fin_data.wind.deg,
-                    sunset: 0,  // TODO
-                    sunrise: 0, // TODO
+                    sunset: 0,                    // TODO
+                    sunrise: unix_to_datetime(0), // TODO
                 },
             })
         };
@@ -396,6 +399,12 @@ impl WeatherProvider for Service<'_> {
             forecast,
         })
     }
+}
+
+fn unix_to_datetime(timestamp: i64) -> DateTime<Utc> {
+    let d = UNIX_EPOCH + Duration::from_secs(timestamp.unsigned_abs());
+    // Create DateTime from SystemTime
+    DateTime::<Utc>::from(d)
 }
 
 fn weather_to_icon(weather: &str, is_night: bool) -> WeatherIcon {
