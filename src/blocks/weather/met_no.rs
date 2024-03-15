@@ -63,7 +63,7 @@ impl<'a> Service<'a> {
             wind_direction: instant.wind_from_direction,
             icon: weather_to_icon(summary, is_night),
             sunrise: unix_to_datetime(0), // TODO
-            sunset: 0,                    // TODO
+            sunset: unix_to_datetime(0),  // TODO
         }
     }
 }
