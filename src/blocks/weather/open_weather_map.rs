@@ -394,8 +394,8 @@ impl WeatherProvider for Service<'_> {
                             UnitSystem::Imperial => 3.6 * 0.447,
                         },
                     wind_direction: fin_data.wind.deg,
-                    sunset: unix_to_datetime(0),  // TODO
-                    sunrise: unix_to_datetime(0), // TODO
+                    sunset: unix_to_datetime(forecast_data.city.sunset),
+                    sunrise: unix_to_datetime(forecast_data.city.sunrise),
                 },
             })
         };
