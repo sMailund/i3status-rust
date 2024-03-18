@@ -150,6 +150,13 @@ fn getenv_openweathermap_zip() -> Option<String> {
 #[derive(Deserialize, Debug)]
 struct ApiForecastResponse {
     list: Vec<ApiInstantResponse>,
+    city: ApiCityReponse,
+}
+
+#[derive(Deserialize, Debug)]
+struct ApiCityReponse {
+    sunrise: i64,
+    sunset: i64,
 }
 
 #[derive(Deserialize, Debug)]
