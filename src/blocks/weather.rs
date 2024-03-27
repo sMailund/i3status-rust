@@ -226,9 +226,8 @@ struct WeatherMoment {
     wind: f64,
     wind_kmh: f64,
     wind_direction: Option<f64>,
-    sunrise: DateTime<Utc>,
-    sunset: DateTime<Utc>,
 }
+
 struct ForecastAggregate {
     temp: f64,
     apparent: f64,
@@ -267,9 +266,8 @@ impl WeatherResult {
             "wind" => Value::number(self.current_weather.wind),
             "wind_kmh" => Value::number(self.current_weather.wind_kmh),
             "direction" => Value::text(convert_wind_direction(self.current_weather.wind_direction).into()),
-            "sunset" => Value::datetime(self.current_weather.sunset, None), // TODO self.sunrise
-            // and sunset here
-            "sunrise" => Value::datetime(self.current_weather.sunrise, None),
+            "sunset" => Value::datetime(self.sunset, None),
+            "sunrise" => Value::datetime(self.sunrise, None),
         };
 
         if let Some(forecast) = self.forecast {

@@ -1,5 +1,3 @@
-use std::time::UNIX_EPOCH;
-
 use super::*;
 
 type LegendsStore = HashMap<String, LegendsResult>;
@@ -62,16 +60,8 @@ impl<'a> Service<'a> {
             wind_kmh: wind_speed * 3.6,
             wind_direction: instant.wind_from_direction,
             icon: weather_to_icon(summary, is_night),
-            sunrise: unix_to_datetime(0), // TODO
-            sunset: unix_to_datetime(0),  // TODO
         }
     }
-}
-
-fn unix_to_datetime(timestamp: i64) -> DateTime<Utc> {
-    let d = UNIX_EPOCH + Duration::from_secs(timestamp.unsigned_abs());
-    // Create DateTime from SystemTime
-    DateTime::<Utc>::from(d)
 }
 
 #[derive(Deserialize)]
@@ -337,9 +327,12 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
+        let current_date = chrono::Local::now().format("%Y-%m-%d").to_string();
+
         let sun_query_string: HashMap<&str, String> = map! {
             "lat" => &lat,
             "lon" => &lon,
+            "date" => & current_date
         };
 
         let sun_data: SunResponse = REQWEST_CLIENT
