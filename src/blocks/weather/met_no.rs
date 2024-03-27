@@ -131,45 +131,18 @@ struct ForecastTimeInstant {
 
 #[derive(Debug, Deserialize)]
 struct SunResponse {
-    copyright: String,
-    license_url: String,
-    r#type: String,
-    geometry: Geometry,
-    when: When,
     properties: Properties,
 }
 
 #[derive(Debug, Deserialize)]
-struct Geometry {
-    r#type: String,
-    coordinates: Vec<f64>,
-}
-
-#[derive(Debug, Deserialize)]
-struct When {
-    interval: Vec<String>,
-}
-
-#[derive(Debug, Deserialize)]
 struct Properties {
-    body: String,
     sunrise: TimeData,
     sunset: TimeData,
-    solarnoon: SolarData,
-    solarmidnight: SolarData,
 }
 
 #[derive(Debug, Deserialize)]
 struct TimeData {
     time: String,
-    azimuth: f64,
-}
-
-#[derive(Debug, Deserialize)]
-struct SolarData {
-    time: String,
-    disc_centre_elevation: f64,
-    visible: bool,
 }
 
 static LEGENDS: Lazy<Option<LegendsStore>> =
