@@ -400,10 +400,15 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
+        let sunrise = unix_to_datetime(current_data.sys.sunrise);
+        let sunset = unix_to_datetime(current_data.sys.sunset);
+
         Ok(WeatherResult {
             location: current_data.name,
             current_weather,
             forecast,
+            sunrise,
+            sunset,
         })
     }
 }
