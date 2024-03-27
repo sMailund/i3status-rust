@@ -87,7 +87,7 @@
 //! ----------------|-------------------------------------------|---------------
 //! `toggle_format` | Toggles between `format` and `format_alt` | Left
 //!
-//! # Example
+//! # Examples
 //!
 //! Show detailed weather in San Francisco through the OpenWeatherMap service:
 //!
@@ -102,6 +102,17 @@
 //! city_id = "5398563"
 //! units = "metric"
 //! forecast_hours = 9
+//! ```
+//!
+//! Show sunrise and sunset times in null island
+//!
+//! ```toml
+//! [[block]]
+//! block = "weather"
+//! format = "up $sunrise.datetime(f:'%R') down $sunset.datetime(f:'%R')"
+//! [block.service]
+//! name = "metno"
+//! coordinates = ["0", "0"]
 //! ```
 //!
 //! # Used Icons
