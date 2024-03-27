@@ -176,7 +176,7 @@ static LEGENDS: Lazy<Option<LegendsStore>> =
     Lazy::new(|| serde_json::from_str(include_str!("met_no_legends.json")).ok());
 
 const FORECAST_URL: &str = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
-const SUN_URL: &str = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
+const SUN_URL: &str = "https://api.met.no/weatherapi/sunrise/3.0/sun";
 
 fn translate(legend: &LegendsStore, summary: &str, lang: &ApiLanguage) -> String {
     legend
