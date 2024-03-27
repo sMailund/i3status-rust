@@ -139,10 +139,54 @@ struct ForecastTimeInstant {
     relative_humidity: Option<f64>,
 }
 
+#[derive(Debug, Deserialize)]
+struct SunResponse {
+    copyright: String,
+    license_url: String,
+    r#type: String,
+    geometry: Geometry,
+    when: When,
+    properties: Properties,
+}
+
+#[derive(Debug, Deserialize)]
+struct Geometry {
+    r#type: String,
+    coordinates: Vec<f64>,
+}
+
+#[derive(Debug, Deserialize)]
+struct When {
+    interval: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct Properties {
+    body: String,
+    sunrise: TimeData,
+    sunset: TimeData,
+    solarnoon: SolarData,
+    solarmidnight: SolarData,
+}
+
+#[derive(Debug, Deserialize)]
+struct TimeData {
+    time: String,
+    azimuth: f64,
+}
+
+#[derive(Debug, Deserialize)]
+struct SolarData {
+    time: String,
+    disc_centre_elevation: f64,
+    visible: bool,
+}
+
 static LEGENDS: Lazy<Option<LegendsStore>> =
     Lazy::new(|| serde_json::from_str(include_str!("met_no_legends.json")).ok());
 
 const FORECAST_URL: &str = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
+const SUN_URL: &str = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
 
 fn translate(legend: &LegendsStore, summary: &str, lang: &ApiLanguage) -> String {
     legend
@@ -170,8 +214,8 @@ impl WeatherProvider for Service<'_> {
             .error("No location given")?;
 
         let querystr: HashMap<&str, String> = map! {
-            "lat" => lat,
-            "lon" => lon,
+            "lat" => &lat,
+            "lon" => &lon,
             [if let Some(alt) = &self.config.altitude] "altitude" => alt,
         };
 
@@ -293,11 +337,37 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
+        let sun_query_string: HashMap<&str, String> = map! {
+            "lat" => &lat,
+            "lon" => &lon,
+        };
+
+        let sun_data: SunResponse = REQWEST_CLIENT
+            .get(SUN_URL)
+            .query(&sun_query_string)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .send()
+            .await
+            .error("Forecast request failed")?
+            .json()
+            .await
+            .error("Forecast request failed")?;
+
+        let sunset = DateTime::parse_from_rfc3339(&sun_data.properties.sunrise.time)
+            .error("failed to parse sunset timestring")?
+            .to_utc();
+
+        let sunrise = DateTime::parse_from_rfc3339(&sun_data.properties.sunset.time)
+            .error("failed to parse sunrise timestring")?
+            .to_utc();
+
         Ok(WeatherResult {
             location: location.map_or("Unknown".to_string(), |c| c.city.clone()),
             current_weather: self
                 .get_weather_instant(&data.properties.timeseries.first().unwrap().data),
             forecast,
+            sunset,
+            sunrise,
         })
     }
 }

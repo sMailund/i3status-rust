@@ -242,6 +242,8 @@ struct WeatherResult {
     location: String,
     current_weather: WeatherMoment,
     forecast: Option<Forecast>,
+    sunrise: DateTime<Utc>,
+    sunset: DateTime<Utc>,
 }
 
 struct Forecast {
@@ -265,7 +267,8 @@ impl WeatherResult {
             "wind" => Value::number(self.current_weather.wind),
             "wind_kmh" => Value::number(self.current_weather.wind_kmh),
             "direction" => Value::text(convert_wind_direction(self.current_weather.wind_direction).into()),
-            "sunset" => Value::datetime(self.current_weather.sunset, None),
+            "sunset" => Value::datetime(self.current_weather.sunset, None), // TODO self.sunrise
+            // and sunset here
             "sunrise" => Value::datetime(self.current_weather.sunrise, None),
         };
 
