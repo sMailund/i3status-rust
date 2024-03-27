@@ -319,13 +319,14 @@ impl WeatherProvider for Service<'_> {
             .await
             .error("Forecast request failed")?;
 
-        let sunset = DateTime::parse_from_rfc3339(&sun_data.properties.sunrise.time)
+        let sunset = DateTime::parse_from_str(&sun_data.properties.sunset.time, "%Y-%m-%dT%H:%M%z")
             .error("failed to parse sunset timestring")?
             .to_utc();
 
-        let sunrise = DateTime::parse_from_rfc3339(&sun_data.properties.sunset.time)
-            .error("failed to parse sunrise timestring")?
-            .to_utc();
+        let sunrise =
+            DateTime::parse_from_str(&sun_data.properties.sunrise.time, "%Y-%m-%dT%H:%M%z")
+                .error("failed to parse sunrise timestring")?
+                .to_utc();
 
         Ok(WeatherResult {
             location: location.map_or("Unknown".to_string(), |c| c.city.clone()),
