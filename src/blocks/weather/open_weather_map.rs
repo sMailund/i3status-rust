@@ -389,8 +389,8 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
-        let sunrise = unix_to_datetime(current_data.sys.sunrise);
-        let sunset = unix_to_datetime(current_data.sys.sunset);
+        let sunrise = DateTime::<Utc>::from_timestamp(current_data.sys.sunrise, 0).unwrap();
+        let sunset = DateTime::<Utc>::from_timestamp(current_data.sys.sunset, 0).unwrap();
 
         Ok(WeatherResult {
             location: current_data.name,
@@ -400,12 +400,6 @@ impl WeatherProvider for Service<'_> {
             sunset,
         })
     }
-}
-
-fn unix_to_datetime(timestamp: i64) -> DateTime<Utc> {
-    let d = UNIX_EPOCH + Duration::from_secs(timestamp.unsigned_abs());
-    // Create DateTime from SystemTime
-    DateTime::<Utc>::from(d)
 }
 
 fn weather_to_icon(weather: &str, is_night: bool) -> WeatherIcon {
