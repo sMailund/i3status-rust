@@ -1,5 +1,3 @@
-
-
 use super::*;
 use chrono::{DateTime, Utc};
 use serde::{de, Deserializer};
@@ -207,6 +205,7 @@ impl WeatherProvider for Service<'_> {
         &self,
         autolocated: Option<&Coordinates>,
         need_forecast: bool,
+        _need_sunrise_and_sunset: bool,
     ) -> Result<WeatherResult> {
         let location_query = autolocated
             .as_ref()

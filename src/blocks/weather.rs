@@ -170,6 +170,7 @@ trait WeatherProvider {
         &self,
         autolocated_location: Option<&Coordinates>,
         need_forecast: bool,
+        need_sunrise_and_sunset: bool,
     ) -> Result<WeatherResult>;
 }
 
@@ -333,6 +334,7 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
 
     let autolocate_interval = config.autolocate_interval.unwrap_or(config.interval);
     let need_forecast = need_forecast(&format, format_alt.as_ref());
+    let need_sunrise_and_sunset = need_sunrise_and_sunset(&format, format_alt.as_ref());
 
     let mut timer = config.interval.timer();
 
@@ -344,7 +346,8 @@ pub async fn run(config: &Config, api: &CommonApi) -> Result<()> {
             None
         };
 
-        let fetch = || provider.get_weather(location.as_ref(), need_forecast);
+        let fetch =
+            || provider.get_weather(location.as_ref(), need_forecast, need_sunrise_and_sunset);
         let data = fetch.retry(&ExponentialBuilder::default()).await?;
         let data_values = data.into_values();
 

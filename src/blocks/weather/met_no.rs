@@ -169,6 +169,7 @@ impl WeatherProvider for Service<'_> {
         &self,
         location: Option<&Coordinates>,
         need_forecast: bool,
+        need_sunrise_and_sunset: bool,
     ) -> Result<WeatherResult> {
         let (lat, lon) = location
             .as_ref()
