@@ -393,6 +393,13 @@ fn need_forecast(format: &Format, format_alt: Option<&Format>) -> bool {
     has_forecast_key(format) || format_alt.is_some_and(has_forecast_key)
 }
 
+fn need_sunrise_and_sunset(format: &Format, format_alt: Option<&Format>) -> bool {
+    fn has_sunrise_or_sunset_keys(format: &Format) -> bool {
+        format.contains_key("sunrise") || format.contains_key("sunset")
+    }
+    has_sunrise_or_sunset_keys(format) || format_alt.is_some_and(has_sunrise_or_sunset_keys)
+}
+
 #[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq, SmartDefault)]
 #[serde(rename_all = "lowercase")]
 enum UnitSystem {
