@@ -388,8 +388,8 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
-        let sunrise = DateTime::<Utc>::from_timestamp(current_data.sys.sunrise, 0).unwrap();
-        let sunset = DateTime::<Utc>::from_timestamp(current_data.sys.sunset, 0).unwrap();
+        let sunrise = Some(DateTime::<Utc>::from_timestamp(current_data.sys.sunrise, 0).unwrap());
+        let sunset = Some(DateTime::<Utc>::from_timestamp(current_data.sys.sunset, 0).unwrap());
 
         Ok(WeatherResult {
             location: current_data.name,

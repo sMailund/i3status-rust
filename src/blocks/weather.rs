@@ -253,8 +253,8 @@ struct WeatherResult {
     location: String,
     current_weather: WeatherMoment,
     forecast: Option<Forecast>,
-    sunrise: DateTime<Utc>,
-    sunset: DateTime<Utc>,
+    sunrise: Option<DateTime<Utc>>,
+    sunset: Option<DateTime<Utc>>,
 }
 
 struct Forecast {
@@ -278,8 +278,6 @@ impl WeatherResult {
             "wind" => Value::number(self.current_weather.wind),
             "wind_kmh" => Value::number(self.current_weather.wind_kmh),
             "direction" => Value::text(convert_wind_direction(self.current_weather.wind_direction).into()),
-            "sunset" => Value::datetime(self.sunset, None),
-            "sunrise" => Value::datetime(self.sunrise, None),
         };
 
         if let Some(forecast) = self.forecast {
@@ -310,6 +308,18 @@ impl WeatherResult {
                     "weather_verbose_ffin" => Value::text(forecast.fin.weather_verbose.clone()),
 
             });
+        }
+
+        if let Some(sunset) = self.sunset {
+            values.extend(map! {
+            "sunset" => Value::datetime(sunset, None),
+            })
+        }
+
+        if let Some(sunrise) = self.sunrise {
+            values.extend(map! {
+            "sunrise" => Value::datetime(sunrise, None),
+            })
         }
         values
     }

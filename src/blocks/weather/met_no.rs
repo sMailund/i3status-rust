@@ -320,14 +320,17 @@ impl WeatherProvider for Service<'_> {
             .await
             .error("Forecast request failed")?;
 
-        let sunset = DateTime::parse_from_str(&sun_data.properties.sunset.time, "%Y-%m-%dT%H:%M%z")
-            .error("failed to parse sunset timestring")?
-            .to_utc();
+        let sunset = Some(
+            DateTime::parse_from_str(&sun_data.properties.sunset.time, "%Y-%m-%dT%H:%M%z")
+                .error("failed to parse sunset timestring")?
+                .to_utc(),
+        );
 
-        let sunrise =
+        let sunrise = Some(
             DateTime::parse_from_str(&sun_data.properties.sunrise.time, "%Y-%m-%dT%H:%M%z")
                 .error("failed to parse sunrise timestring")?
-                .to_utc();
+                .to_utc(),
+        );
 
         Ok(WeatherResult {
             location: location.map_or("Unknown".to_string(), |c| c.city.clone()),
