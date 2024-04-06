@@ -301,36 +301,43 @@ impl WeatherProvider for Service<'_> {
             })
         };
 
-        let current_date = chrono::Local::now().format("%Y-%m-%d").to_string();
+        let (sunset, sunrise) = match need_sunrise_and_sunset {
+            true => {
+                let current_date = chrono::Local::now().format("%Y-%m-%d").to_string();
 
-        let sun_query_string: HashMap<&str, String> = map! {
-            "lat" => &lat,
-            "lon" => &lon,
-            "date" => & current_date
+                let sun_query_string: HashMap<&str, String> = map! {
+                    "lat" => &lat,
+                    "lon" => &lon,
+                    "date" => & current_date
+                };
+
+                let sun_data: SunResponse = REQWEST_CLIENT
+                    .get(SUN_URL)
+                    .query(&sun_query_string)
+                    .header(reqwest::header::CONTENT_TYPE, "application/json")
+                    .send()
+                    .await
+                    .error("Forecast request failed")?
+                    .json()
+                    .await
+                    .error("Forecast request failed")?;
+
+                let sunset = Some(
+                    DateTime::parse_from_str(&sun_data.properties.sunset.time, "%Y-%m-%dT%H:%M%z")
+                        .error("failed to parse sunset timestring")?
+                        .to_utc(),
+                );
+
+                let sunrise = Some(
+                    DateTime::parse_from_str(&sun_data.properties.sunrise.time, "%Y-%m-%dT%H:%M%z")
+                        .error("failed to parse sunrise timestring")?
+                        .to_utc(),
+                );
+
+                (sunset, sunrise)
+            }
+            false => (None, None),
         };
-
-        let sun_data: SunResponse = REQWEST_CLIENT
-            .get(SUN_URL)
-            .query(&sun_query_string)
-            .header(reqwest::header::CONTENT_TYPE, "application/json")
-            .send()
-            .await
-            .error("Forecast request failed")?
-            .json()
-            .await
-            .error("Forecast request failed")?;
-
-        let sunset = Some(
-            DateTime::parse_from_str(&sun_data.properties.sunset.time, "%Y-%m-%dT%H:%M%z")
-                .error("failed to parse sunset timestring")?
-                .to_utc(),
-        );
-
-        let sunrise = Some(
-            DateTime::parse_from_str(&sun_data.properties.sunrise.time, "%Y-%m-%dT%H:%M%z")
-                .error("failed to parse sunrise timestring")?
-                .to_utc(),
-        );
 
         Ok(WeatherResult {
             location: location.map_or("Unknown".to_string(), |c| c.city.clone()),
