@@ -311,15 +311,11 @@ impl WeatherResult {
         }
 
         if let Some(sunset) = self.sunset {
-            values.extend(map! {
-            "sunset" => Value::datetime(sunset, None),
-            })
+            values.insert("sunset".into(), Value::datetime(sunset, None));
         }
 
         if let Some(sunrise) = self.sunrise {
-            values.extend(map! {
-            "sunrise" => Value::datetime(sunrise, None),
-            })
+            values.insert("sunrise".into(), Value::datetime(sunrise, None));
         }
         values
     }
