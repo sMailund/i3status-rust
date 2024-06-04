@@ -303,12 +303,9 @@ impl WeatherProvider for Service<'_> {
 
         let (sunset, sunrise) = match need_sunrise_and_sunset {
             true => {
-                let current_date = chrono::Local::now().format("%Y-%m-%d").to_string();
-
                 let sun_query_string: HashMap<&str, String> = map! {
                     "lat" => &lat,
                     "lon" => &lon,
-                    "date" => & current_date
                 };
 
                 let sun_data: SunResponse = REQWEST_CLIENT
